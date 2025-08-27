@@ -89,19 +89,43 @@
 
         <!-- Contenedor de la tabla para la exportación -->
         <div id="scheduleContainer" class="bg-white rounded-xl shadow-lg overflow-x-auto">
-            <table class="w-full border-collapse">
+            <table class="table-fixed w-full border-collapse">
                 <thead class="bg-gray-100">
                     <tr>
-                        <th class="w-24 p-3 text-sm font-semibold text-gray-600 text-left border-b border-r">Hora</th>
-                        <th class="p-3 text-sm font-semibold text-gray-600 text-center border-b">Lunes</th>
-                        <th class="p-3 text-sm font-semibold text-gray-600 text-center border-b">Martes</th>
-                        <th class="p-3 text-sm font-semibold text-gray-600 text-center border-b">Miércoles</th>
-                        <th class="p-3 text-sm font-semibold text-gray-600 text-center border-b">Jueves</th>
-                        <th class="p-3 text-sm font-semibold text-gray-600 text-center border-b">Viernes</th>
-                        <th class="p-3 text-sm font-semibold text-gray-600 text-center border-b">Sábado</th>
-                        <th class="p-3 text-sm font-semibold text-gray-600 text-center border-b">Domingo</th>
+                      <th class="w-1/7 sm:w-24 p-1 sm:p-3 text-xs sm:text-sm font-semibold text-gray-600 text-center border-b border-r">
+                        Hora
+                      </th>
+                      <th class="w-1/7 p-1 sm:p-3 text-xs sm:text-sm font-semibold text-gray-600 text-center border-b">
+                        <span class="sm:hidden">Lun</span>
+                        <span class="hidden sm:inline">Lunes</span>
+                      </th>
+                      <th class="w-1/7 p-1 sm:p-3 text-xs sm:text-sm font-semibold text-gray-600 text-center border-b">
+                        <span class="sm:hidden">Mar</span>
+                        <span class="hidden sm:inline">Martes</span>
+                      </th>
+                      <th class="w-1/7 p-1 sm:p-3 text-xs sm:text-sm font-semibold text-gray-600 text-center border-b">
+                        <span class="sm:hidden">Mié</span>
+                        <span class="hidden sm:inline">Miércoles</span>
+                      </th>
+                      <th class="w-1/7 p-1 sm:p-3 text-xs sm:text-sm font-semibold text-gray-600 text-center border-b">
+                        <span class="sm:hidden">Jue</span>
+                        <span class="hidden sm:inline">Jueves</span>
+                      </th>
+                      <th class="w-1/7 p-1 sm:p-3 text-xs sm:text-sm font-semibold text-gray-600 text-center border-b">
+                        <span class="sm:hidden">Vie</span>
+                        <span class="hidden sm:inline">Viernes</span>
+                      </th>
+                      <th class="w-1/7 p-1 sm:p-3 text-xs sm:text-sm font-semibold text-gray-600 text-center border-b">
+                        <span class="sm:hidden">Sáb</span>
+                        <span class="hidden sm:inline">Sábado</span>
+                      </th>
+                      <th class="w-1/7 p-1 sm:p-3 text-xs sm:text-sm font-semibold text-gray-600 text-center border-b">
+                        <span class="sm:hidden">Dom</span>
+                        <span class="hidden sm:inline">Domingo</span>
+                      </th>
                     </tr>
-                </thead>
+                  </thead>
+                  
                 <tbody id="scheduleBody">
                     <!-- Las filas de horas se generarán con JavaScript -->
                 </tbody>
@@ -178,7 +202,7 @@
                 for (let hour = 0; hour < 24; hour++) {
                     const row = document.createElement('tr');
                     const timeCell = document.createElement('td');
-                    timeCell.className = 'p-3 text-sm text-gray-500 border-r border-b align-top';
+                    timeCell.className = 'p-1 sm:p-3 text-xs sm:text-sm text-gray-500 border-r border-b align-center text-center';
                     timeCell.textContent = `${String(hour).padStart(2, '0')}:00`;
                     row.appendChild(timeCell);
 
