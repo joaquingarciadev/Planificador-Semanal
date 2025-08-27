@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Planificador Semanal Interactivo</title>
+    <title>Planificador Semanal</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f3f4f6;
         }
         .time-slot {
             height: 60px; /* Altura de cada franja horaria */
@@ -18,10 +17,10 @@
         }
         .task {
             position: absolute;
-            left: 2px;
-            right: 2px;
+            left: 0;
+            right: 0;
             border-radius: 0.375rem;
-            padding: 4px 6px;
+            padding: 4px;
             font-size: 0.8rem;
             cursor: move;
             z-index: 10;
@@ -43,6 +42,8 @@
             position: absolute;
             bottom: 4px;
             right: 4px;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
         }
         @media (max-width: 767px) {
             .task-controls {
@@ -77,7 +78,7 @@
         }
     </style>
 </head>
-<body class="p-4 md:p-8">
+<body class="p-2 md:p-8">
     <div class="max-w-7xl mx-auto">
         <header class="flex flex-col md:flex-row justify-between items-center mb-6">
             <h1 class="text-3xl font-bold text-gray-800">Planificador Semanal</h1>
@@ -92,11 +93,11 @@
         </header>
 
         <!-- Contenedor de la tabla para la exportación -->
-        <div id="scheduleContainer" class="bg-white rounded-xl shadow-lg overflow-x-auto">
+        <div id="scheduleContainer" class="bg-white rounded-lg shadow-lg overflow-x-auto">
             <table class="table-fixed w-full border-collapse">
                 <thead class="bg-gray-100">
                     <tr>
-                      <th class="w-12 sm:w-24 p-1 sm:p-3 text-xs sm:text-sm font-semibold text-gray-600 text-center border-b border-r">
+                      <th class="w-1/7 sm:w-24 p-1 sm:p-3 text-xs sm:text-sm font-semibold text-gray-600 text-center border-b border-r">
                         Hora
                       </th>
                       <th class="w-1/7 p-1 sm:p-3 text-xs sm:text-sm font-semibold text-gray-600 text-center border-b">
@@ -254,8 +255,8 @@
 
                         // Contenido de la tarea
                         taskEl.innerHTML = `
-                            <span class="font-semibold text-xs">${task.text}</span>
-                            <span class="text-xs">${task.startTime} - ${task.endTime}</span>
+                            <span class="font-semibold text-xs truncate">${task.text}</span>
+                            <span class="text-xs hidden sm:inline">${task.startTime} - ${task.endTime}</span>
                             <div class="task-controls">
                                 <button class="task-control-btn edit-btn" data-task-id="${task.id}" title="Editar">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
@@ -464,19 +465,29 @@
                 const controls = document.querySelectorAll('.task-controls');
                 controls.forEach(c => c.style.display = 'none');
                 
-                html2canvas(scheduleContainer, {
-                    scale: 2,
+                // Clonar el contenedor
+                const clone = scheduleContainer.cloneNode(true);
+                clone.style.width = '1200px';  // Ancho como si fuera desktop
+                clone.style.transform = 'scale(1)'; // Sin escalado visual
+                clone.style.position = 'fixed';
+                clone.style.top = '-9999px'; // Fuera de la vista
+                document.body.appendChild(clone);
+
+                html2canvas(clone, {
+                    scale: window.devicePixelRatio || 2,
                     useCORS: true,
-                    backgroundColor: '#f3f4f6'
+                    backgroundColor: '#f3f4f6',
                 }).then(canvas => {
                     const link = document.createElement('a');
                     link.download = 'planificador-semanal.png';
                     link.href = canvas.toDataURL('image/png');
                     link.click();
                     controls.forEach(c => c.style.display = '');
+                    document.body.removeChild(clone);
                 }).catch(err => {
                     console.error("Error al generar la imagen:", err);
                     controls.forEach(c => c.style.display = '');
+                    document.body.removeChild(clone);
                 });
             });
 
